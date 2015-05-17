@@ -77,24 +77,18 @@
   //     object.trigger('expand');
   //
   function triggerEvents2( events, a, b){
-      if( events ){
-          var l = events.length, ev;
-          for( var i = 0; i < l; i++ ) (ev = events[i]).callback.call(ev.ctx, a, b );
-      }
+      var l = events.length, ev;
+      for( var i = 0; i < l; i++ ) (ev = events[i]).callback.call(ev.ctx, a, b );
   }
 
   function triggerEvents3( events, a, b, c){
-      if( events ){
-          var l = events.length, ev;
-          for( var i = 0; i < l; i++ ) (ev = events[i]).callback.call(ev.ctx, a, b, c );
-      }
+      var l = events.length, ev;
+      for( var i = 0; i < l; i++ ) (ev = events[i]).callback.call(ev.ctx, a, b, c );
   }
 
   function triggerEvents4( events, a, b, c, d){
-      if( events ){
-          var l = events.length, ev;
-          for( var i = 0; i < l; i++ ) (ev = events[i]).callback.call(ev.ctx, a, b, c, d );
-      }
+      var l = events.length, ev;
+      for( var i = 0; i < l; i++ ) (ev = events[i]).callback.call(ev.ctx, a, b, c, d );
   }
 
 
@@ -194,8 +188,11 @@
         var _events = this._events;
 
         if( _events ){
-            triggerEvents2( _events[ name ], a, b );
-            triggerEvents3( _events.all, name, a, b );
+            var events = _events[ name ],
+                allEvents = _events.all;
+
+            events && triggerEvents2( events, a, b );
+            allEvents && triggerEvents3( allEvents, name, a, b );
         }
         return this;
     },
@@ -205,8 +202,11 @@
         var _events = this._events;
 
         if( _events ){
-            triggerEvents3( _events[ name ], a, b, c );
-            triggerEvents4( _events.all, name, a, b, c );
+            var events = _events[ name ],
+                allEvents = _events.all;
+
+            events && triggerEvents3( events, a, b, c );
+            allEvents && triggerEvents4( allEvents, name, a, b, c );
         }
 
         return this;
