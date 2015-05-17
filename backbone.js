@@ -76,6 +76,28 @@
   //     object.on('expand', function(){ alert('expanded'); });
   //     object.trigger('expand');
   //
+  function triggerEvents2( events, a, b){
+      if( events ){
+          var l = events.length, ev;
+          for( var i = 0; i < l; i++ ) (ev = events[i]).callback.call(ev.ctx, a, b );
+      }
+  }
+
+  function triggerEvents3( events, a, b, c){
+      if( events ){
+          var l = events.length, ev;
+          for( var i = 0; i < l; i++ ) (ev = events[i]).callback.call(ev.ctx, a, b, c );
+      }
+  }
+
+  function triggerEvents4( events, a, b, c, d){
+      if( events ){
+          var l = events.length, ev;
+          for( var i = 0; i < l; i++ ) (ev = events[i]).callback.call(ev.ctx, a, b, c, d );
+      }
+  }
+
+
   var Events = Backbone.Events = {
 
     // Bind an event to a `callback` function. Passing `"all"` will bind
@@ -165,6 +187,29 @@
       if (events) triggerEvents(events, args);
       if (allEvents) triggerEvents(allEvents, arguments);
       return this;
+    },
+
+    _trigger3 : function(name, a, b) {
+        'use strict';
+        var _events = this._events;
+
+        if( _events ){
+            triggerEvents2( _events[ name ], a, b );
+            triggerEvents3( _events.all, name, a, b );
+        }
+        return this;
+    },
+
+    _trigger4 : function(name, a, b, c) {
+        'use strict';
+        var _events = this._events;
+
+        if( _events ){
+            triggerEvents3( _events[ name ], a, b, c );
+            triggerEvents4( _events.all, name, a, b, c );
+        }
+
+        return this;
     },
 
     // Tell this object to stop listening to either specific events ... or
@@ -275,6 +320,10 @@
     this.initialize.apply(this, arguments);
   };
 
+  function attrIsEqual( a, b ){
+    return a === b || ( typeof a == 'object' && a && typeof b == 'object' && b && _.isEqual( a, b ) );
+  }
+
   // Attach all inheritable methods to the Model prototype.
   _.extend(Model.prototype, Events, {
 
@@ -360,8 +409,8 @@
       // For each `set` attribute, update or delete the current value.
       for (attr in attrs) {
         val = attrs[attr];
-        if (!_.isEqual(current[attr], val)) changes.push(attr);
-        if (!_.isEqual(prev[attr], val)) {
+        if (!attrIsEqual(current[attr], val)) changes.push(attr);
+        if (!attrIsEqual(prev[attr], val)) {
           this.changed[attr] = val;
         } else {
           delete this.changed[attr];
@@ -373,7 +422,7 @@
       if (!silent) {
         if (changes.length) this._pending = options;
         for (var i = 0, length = changes.length; i < length; i++) {
-          this.trigger('change:' + changes[i], this, current[changes[i]], options);
+          this._trigger4('change:' + changes[i], this, current[changes[i]], options);
         }
       }
 
@@ -384,7 +433,7 @@
         while (this._pending) {
           options = this._pending;
           this._pending = false;
-          this.trigger('change', this, options);
+          this._trigger3('change', this, options);
         }
       }
       this._pending = false;
@@ -423,7 +472,7 @@
       var val, changed = false;
       var old = this._changing ? this._previousAttributes : this.attributes;
       for (var attr in diff) {
-        if (_.isEqual(old[attr], (val = diff[attr]))) continue;
+        if (attrIsEqual(old[attr], (val = diff[attr]))) continue;
         (changed || (changed = {}))[attr] = val;
       }
       return changed;
