@@ -120,8 +120,8 @@
   function triggerEvents( events, args ) {
       'use strict';
       if( events ){
-          var l = events.length, ev, i = -1;
-          while (++i < l) (ev = events[i]).callback.apply(ev.ctx, args);
+          var l = events.length, ev;
+          for( var i = 0; i < l; i++ ) (ev = events[i]).callback.apply(ev.ctx, args);
       }
   };
 
@@ -213,49 +213,33 @@
 
         var events = _events[ name ], allEvents = _events.all;
 
-      switch( arguments.length ){
-      case 4:
-          triggerEvents3( events, a, b, c );
-          triggerEvents4( allEvents, name, a, b, c );
-          break;
-      case 3:
-          triggerEvents2( events, a, b );
-          triggerEvents3( allEvents, name, a, b );
-          break;
-      case 2:
-          triggerEvents1( events, a );
-          triggerEvents2( allEvents, name, a );
-          break;
-      
-      default:
-          triggerEvents( events, args );
-          triggerEvents( allEvents, arguments);
-      }
+        switch( args.length ){
+          case 0:  triggerEvents0( events ); triggerEvents1( allEvents, name ); break;
+          case 1:  triggerEvents1( events, a ); triggerEvents2( allEvents, name, a ); break;
+          case 2:  triggerEvents2( events, a, b ); triggerEvents3( allEvents, name, a, b ); break;
+          case 3:  triggerEvents3( events, a, b, c ); triggerEvents4( allEvents, name, a, b, c ); break;
+          default: triggerEvents( events, args ); triggerEvents( allEvents, arguments);
+        }
 
-      return this;
+        return this;
     },
 
     _trigger3 : function(name, a, b) {
         'use strict';
         var _events = this._events;
-
         if( _events ){
             triggerEvents2( _events[ name ], a, b );
             triggerEvents3( _events.all, name, a, b );
         }
-        return this;
     },
 
     _trigger4 : function(name, a, b, c) {
         'use strict';
         var _events = this._events;
-
         if( _events ){
             triggerEvents3( _events[ name ], a, b, c );
             triggerEvents4( _events.all, name, a, b, c );
         }
-
-        return this;
     },
 
     // Tell this object to stop listening to either specific events ... or
