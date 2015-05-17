@@ -77,6 +77,7 @@
   //     object.trigger('expand');
   //
   function triggerEvents2( events, a, b){
+      'use strict';
       if( events ){
           var l = events.length, ev;
           for( var i = 0; i < l; i++ ) (ev = events[i]).callback.call(ev.ctx, a, b );
@@ -84,6 +85,7 @@
   }
 
   function triggerEvents3( events, a, b, c){
+      'use strict';
       if( events ){
           var l = events.length, ev;
           for( var i = 0; i < l; i++ ) (ev = events[i]).callback.call(ev.ctx, a, b, c );
@@ -91,6 +93,7 @@
   }
 
   function triggerEvents4( events, a, b, c, d){
+      'use strict';
       if( events ){
           var l = events.length, ev;
           for( var i = 0; i < l; i++ ) (ev = events[i]).callback.call(ev.ctx, a, b, c, d );
