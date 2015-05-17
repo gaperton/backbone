@@ -189,21 +189,11 @@
 
         if( _events ){
             var events = _events[ name ],
-                allEvents = _events.all, i, l, ev;
+                allEvents = _events.all;
 
-            if( events ){
-                for( l = events.length, i = 0; i < l; i++ ){
-                    (ev = events[i]).callback.call(ev.ctx, a, b );
-                }
-            }
-
-            if( allEvents ){
-                for( l = allEvents.length, i = 0; i < l; i++ ){
-                    (ev = allEvents[i]).callback.call(ev.ctx, name, a, b );
-                }
-            }
+            events && triggerEvents2( events, a, b );
+            allEvents && triggerEvents3( allEvents, name, a, b );
         }
-
         return this;
     },
 
@@ -213,19 +203,10 @@
 
         if( _events ){
             var events = _events[ name ],
-                allEvents = _events.all, i, l, ev;
+                allEvents = _events.all;
 
-            if( events ){
-                for( l = events.length, i = 0; i < l; i++ ){
-                    (ev = events[i]).callback.call(ev.ctx, a, b, c );
-                }
-            }
-
-            if( allEvents ){
-                for( l = allEvents.length, i = 0; i < l; i++ ){
-                    (ev = allEvents[i]).callback.call(ev.ctx, name, a, b, c );
-                }
-            }
+            events && triggerEvents3( events, a, b, c );
+            allEvents && triggerEvents4( allEvents, name, a, b, c );
         }
 
         return this;
